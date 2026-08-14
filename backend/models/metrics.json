@@ -1,0 +1,189 @@
+{
+    "model": "XGBoost",
+    "selected_model": "XGBoost",
+    "threshold": 0.62,
+    "models": {
+        "Logistic Regression": {
+            "Accuracy": 0.7579176479127685,
+            "Precision": 0.5290267594090418,
+            "Recall": 0.7993634499863802,
+            "F1": 0.6366751928001093,
+            "ROC-AUC": 0.8554823378913194
+        },
+        "Decision Tree": {
+            "Accuracy": 0.7492548914446093,
+            "Precision": 0.5181980235954712,
+            "Recall": 0.8186233889119869,
+            "F1": 0.6342893207027219,
+            "ROC-AUC": 0.8466219912896069
+        },
+        "Random Forest": {
+            "Accuracy": 0.7566371217497903,
+            "Precision": 0.5354466296182918,
+            "Recall": 0.6292225201072386,
+            "F1": 0.5785151175989334,
+            "ROC-AUC": 0.8169071068904191
+        },
+        "Gradient Boosting": {
+            "Accuracy": 0.8094562552422737,
+            "Precision": 0.6683809903271132,
+            "Recall": 0.56019411908073,
+            "F1": 0.6094577827506973,
+            "ROC-AUC": 0.863307046288831
+        },
+        "XGBoost": {
+            "Accuracy": 0.7638797261113621,
+            "Precision": 0.5367731153894443,
+            "Recall": 0.8127338676148013,
+            "F1": 0.6463925331291679,
+            "ROC-AUC": 0.8611899432641479
+        }
+    },
+    "metrics": {
+        "Accuracy": 0.7638797261113621,
+        "Precision": 0.5367731153894443,
+        "Recall": 0.8127338676148013,
+        "F1": 0.6463925331291679,
+        "ROC-AUC": 0.8611899432641479
+    },
+    "confusion_matrix": {
+        "TN": 4346,
+        "FP": 828,
+        "FN": 488,
+        "TP": 1381
+    },
+    "feature_importance": [
+        {
+            "feature": "cat__Contract_Month-to-month",
+            "importance": 0.280329167842865
+        },
+        {
+            "feature": "cat__Online Security_No",
+            "importance": 0.0883614718914032
+        },
+        {
+            "feature": "cat__Tech Support_No",
+            "importance": 0.077904611825943
+        },
+        {
+            "feature": "cat__Internet Service_Fiber optic",
+            "importance": 0.06797505170106888
+        },
+        {
+            "feature": "cat__Dependents_No",
+            "importance": 0.05558375269174576
+        },
+        {
+            "feature": "cat__Contract_Two year",
+            "importance": 0.04603581130504608
+        },
+        {
+            "feature": "cat__Dependents_Yes",
+            "importance": 0.04343506693840027
+        },
+        {
+            "feature": "cat__Payment Method_Electronic check",
+            "importance": 0.029874317348003387
+        },
+        {
+            "feature": "cat__Streaming Movies_Yes",
+            "importance": 0.02874380722641945
+        },
+        {
+            "feature": "cat__Contract_One year",
+            "importance": 0.027843760326504707
+        },
+        {
+            "feature": "num__Tenure Months",
+            "importance": 0.023874761536717415
+        },
+        {
+            "feature": "cat__Online Security_No internet service",
+            "importance": 0.02326224558055401
+        },
+        {
+            "feature": "cat__Streaming TV_Yes",
+            "importance": 0.019974011927843094
+        },
+        {
+            "feature": "cat__Internet Service_No",
+            "importance": 0.017972029745578766
+        },
+        {
+            "feature": "cat__Internet Service_DSL",
+            "importance": 0.016386356204748154
+        },
+        {
+            "feature": "cat__Paperless Billing_Yes",
+            "importance": 0.015972137451171875
+        },
+        {
+            "feature": "cat__Online Backup_No",
+            "importance": 0.014747576788067818
+        },
+        {
+            "feature": "cat__Paperless Billing_No",
+            "importance": 0.012907059863209724
+        },
+        {
+            "feature": "cat__Multiple Lines_No",
+            "importance": 0.012598683126270771
+        },
+        {
+            "feature": "cat__Multiple Lines_No phone service",
+            "importance": 0.01193548459559679
+        },
+        {
+            "feature": "cat__Multiple Lines_Yes",
+            "importance": 0.011212428100407124
+        },
+        {
+            "feature": "cat__Online Security_Yes",
+            "importance": 0.009794190526008606
+        },
+        {
+            "feature": "cat__Streaming Movies_No",
+            "importance": 0.009256547316908836
+        },
+        {
+            "feature": "cat__Streaming TV_No",
+            "importance": 0.009242657572031021
+        },
+        {
+            "feature": "cat__Payment Method_Mailed check",
+            "importance": 0.00879420805722475
+        },
+        {
+            "feature": "cat__Payment Method_Bank transfer (automatic)",
+            "importance": 0.008318786509335041
+        },
+        {
+            "feature": "cat__Tech Support_Yes",
+            "importance": 0.00809241458773613
+        },
+        {
+            "feature": "cat__Online Backup_Yes",
+            "importance": 0.007800937630236149
+        },
+        {
+            "feature": "cat__Payment Method_Credit card (automatic)",
+            "importance": 0.007087488193064928
+        },
+        {
+            "feature": "cat__Tech Support_No internet service",
+            "importance": 0.0046831946820020676
+        },
+        {
+            "feature": "cat__Streaming Movies_No internet service",
+            "importance": 0.0
+        },
+        {
+            "feature": "cat__Streaming TV_No internet service",
+            "importance": 0.0
+        },
+        {
+            "feature": "cat__Online Backup_No internet service",
+            "importance": 0.0
+        }
+    ]
+}
