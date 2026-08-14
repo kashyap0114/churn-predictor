@@ -3,6 +3,31 @@ import axios from 'axios';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, CartesianGrid } from 'recharts';
 import StatCard from '../components/StatCard';
 
+const API_URL = 'http://localhost:8000';
+
+const CustomTooltip = ({ active, payload, label, valueSuffix = '' }) => {
+  if (active && payload && payload.length) {
+    const data = payload[0];
+    return (
+      <div style={{
+        background: 'var(--card-bg)',
+        border: '1px solid var(--border)',
+        padding: '0.6rem 0.85rem',
+        borderRadius: '8px',
+        boxShadow: 'var(--shadow-md)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)'
+      }}>
+        {label && <p style={{ margin: '0 0 4px 0', fontWeight: 600, fontSize: '0.85rem', color: 'var(--text-main)' }}>{label}</p>}
+        <p style={{ margin: 0, color: 'var(--primary)', fontWeight: 700, fontSize: '0.95rem' }}>
+          {data.name}: {typeof data.value === 'number' ? data.value.toLocaleString() : data.value}{valueSuffix}
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 export default function Dashboard() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -10,7 +35,7 @@ export default function Dashboard() {
 
   const fetchDashboard = () => {
     setLoading(true); setError(false);
-    axios.get('http://localhost:8000/api/dashboard')
+    axios.get(`${API_URL}/api/dashboard`)
       .then((res) => { setData(res.data); setLoading(false); })
       .catch(() => { setError(true); setLoading(false); });
   };
@@ -27,7 +52,7 @@ export default function Dashboard() {
   if (error || !data) return (
     <div className="state-box">
       <p>Unable to load dashboard data. The backend API may be unavailable.</p>
-      <button className="btn btn-outline" style={{width: 'auto', marginTop: '1rem'}} onClick={fetchDashboard}>Retry Connection</button>
+      <button className="btn btn-outline" style={{ width: 'auto', marginTop: '1rem' }} onClick={fetchDashboard}>Retry Connection</button>
     </div>
   );
 
@@ -39,86 +64,126 @@ export default function Dashboard() {
 
   // Dynamic Insights generator
   const getInsights = () => {
-    const highestContract = [...data.charts.churn_by_contract].sort((a,b) => b.churn_rate - a.churn_rate)[0];
-    const highestTenure = [...data.charts.churn_by_tenure].sort((a,b) => b.churn_rate - a.churn_rate)[0];
-    
+    const highestContract = [...data.charts.churn_by_contract].sort((a, b) => b.churn_rate - a.churn_rate)[0];
+    const highestTenure = [...data.charts.churn_by_tenure].sort((a, b) => b.churn_rate - a.churn_rate)[0];
+
     return (
       <div className="insights-box">
-        <h4>Key Insights</h4>
-        <p><span>⚠</span> <strong>Contract Risk:</strong> {highestContract.name} customers show the highest churn rate at {highestContract.churn_rate}%.</p>
-        <p><span>⚠</span> <strong>Tenure Risk:</strong> Customers in the {highestTenure.name} group require closer retention tracking.</p>
-        <p><span>✓</span> <strong>Retention Opportunity:</strong> Long-term contracts and bundled tech support show significantly stronger retention profiles.</p>
+        <h4>Key Observations</h4>
+        <p>
+          <span>⚠</span> 
+          <strong>Contract Risk:</strong> 
+          {highestContract.name} customers show the highest churn rate at {highestContract.churn_rate}%.
+        </p>
+        <p>
+          <span>⚠</span> 
+          <strong>Tenure Risk:</strong> 
+          Customers in the {highestTenure.name} group require closer retention tracking.
+        </p>
+        <p>
+          <span>✓</span> 
+          <strong>Retention Opportunity:</strong> 
+          Long-term contracts and bundled tech support show significantly stronger retention profiles.
+        </p>
       </div>
     );
   };
 
   return (
-    <div style={{ animation: "fadeIn 0.4s ease" }}>
+    <div style={{ animation: "fadeInUp 0.4s ease" }}>
+      {/* SVG gradients definition for charts fill */}
+      <svg style={{ height: 0, width: 0, position: 'absolute' }}>
+        <defs>
+          <linearGradient id="primaryGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--primary)" stopOpacity={0.95} />
+            <stop offset="100%" stopColor="var(--primary)" stopOpacity={0.35} />
+          </linearGradient>
+          <linearGradient id="blueGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#0284c7" stopOpacity={0.95} />
+            <stop offset="100%" stopColor="#0369a1" stopOpacity={0.35} />
+          </linearGradient>
+          <linearGradient id="indigoGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#4f46e5" stopOpacity={0.95} />
+            <stop offset="100%" stopColor="#4338ca" stopOpacity={0.35} />
+          </linearGradient>
+        </defs>
+      </svg>
+
       <div className="page-header">
         <h2>Customer Churn Overview</h2>
         <p>Monitor customer retention and identify the major drivers of churn across the network.</p>
       </div>
-      
+
       <div className="kpi-grid">
-        <StatCard title="Total Customers" value={data.kpis["Total Customers"].toLocaleString()} />
-        <StatCard title="Churned Customers" value={data.kpis["Churned Customers"].toLocaleString()} />
+        <StatCard title="Total Customers" value={data.kpis["Total Customers"]} />
+        <StatCard title="Churned Customers" value={data.kpis["Churned Customers"]} />
         <StatCard title="Overall Churn Rate" value={data.kpis["Churn Rate"]} isPercentage />
-        <StatCard title="Avg Monthly Charges" value={data.kpis["Avg Monthly Charges"].replace('$','')} isCurrency />
+        <StatCard title="Avg Monthly Charges" value={data.kpis["Avg Monthly Charges"].replace('$', '')} isCurrency />
       </div>
-      
+
       <div className="charts-grid">
         <div className="card">
           <div className="card-header">Churn Distribution</div>
           <ResponsiveContainer width="100%" height={260}>
             <PieChart>
-              <Pie data={churnPieData} cx="50%" cy="50%" innerRadius={70} outerRadius={100} paddingAngle={2} dataKey="value">
-                {churnPieData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+              <Pie 
+                data={churnPieData} 
+                cx="50%" 
+                cy="50%" 
+                innerRadius={70} 
+                outerRadius={100} 
+                paddingAngle={4} 
+                dataKey="value"
+              >
+                {churnPieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
               </Pie>
-              <Tooltip formatter={(value) => [value.toLocaleString(), 'Customers']} />
+              <Tooltip content={<CustomTooltip valueSuffix=" Customers" />} />
             </PieChart>
           </ResponsiveContainer>
         </div>
 
         <div className="card">
-          <div className="card-header">Churn Rate by Contract Type (%)</div>
+          <div className="card-header">Churn Rate by Contract Type</div>
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={data.charts.churn_by_contract} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 12}} />
-              <YAxis axisLine={false} tickLine={false} tick={{fontSize: 12}} />
-              <Tooltip cursor={{fill: 'var(--bg)'}} />
-              <Bar dataKey="churn_rate" fill="var(--primary)" radius={[4, 4, 0, 0]} maxBarSize={50} />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'var(--text-muted)' }} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'var(--text-muted)' }} />
+              <Tooltip cursor={{ fill: 'var(--border)', opacity: 0.15 }} content={<CustomTooltip valueSuffix="%" />} />
+              <Bar dataKey="churn_rate" fill="url(#primaryGrad)" radius={[4, 4, 0, 0]} maxBarSize={50} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
         <div className="card">
-          <div className="card-header">Churn Rate by Internet Service (%)</div>
+          <div className="card-header">Churn Rate by Internet Service</div>
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={data.charts.churn_by_internet} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 12}} />
-              <YAxis axisLine={false} tickLine={false} tick={{fontSize: 12}} />
-              <Tooltip cursor={{fill: 'var(--bg)'}} />
-              <Bar dataKey="churn_rate" fill="#0369a1" radius={[4, 4, 0, 0]} maxBarSize={50} />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'var(--text-muted)' }} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'var(--text-muted)' }} />
+              <Tooltip cursor={{ fill: 'var(--border)', opacity: 0.15 }} content={<CustomTooltip valueSuffix="%" />} />
+              <Bar dataKey="churn_rate" fill="url(#blueGrad)" radius={[4, 4, 0, 0]} maxBarSize={50} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
         <div className="card">
-          <div className="card-header">Churn Rate by Customer Tenure (%)</div>
+          <div className="card-header">Churn Rate by Customer Tenure</div>
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={data.charts.churn_by_tenure} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 12}} />
-              <YAxis axisLine={false} tickLine={false} tick={{fontSize: 12}} />
-              <Tooltip cursor={{fill: 'var(--bg)'}} />
-              <Bar dataKey="churn_rate" fill="#4338ca" radius={[4, 4, 0, 0]} maxBarSize={50} />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'var(--text-muted)' }} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'var(--text-muted)' }} />
+              <Tooltip cursor={{ fill: 'var(--border)', opacity: 0.15 }} content={<CustomTooltip valueSuffix="%" />} />
+              <Bar dataKey="churn_rate" fill="url(#indigoGrad)" radius={[4, 4, 0, 0]} maxBarSize={50} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
-      
+
       {getInsights()}
     </div>
   );
