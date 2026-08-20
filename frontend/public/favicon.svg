@@ -1,13 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
   <defs>
-    <linearGradient id="icon-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#14b8a6" />
-      <stop offset="100%" stop-color="#06b6d4" />
+    <linearGradient id="icon-grad" gradientUnits="userSpaceOnUse" x1="2" y1="20" x2="22" y2="4">
+      <stop offset="0%" stop-color="#0f766e" />
+      <stop offset="100%" stop-color="#14b8a6" />
     </linearGradient>
   </defs>
-  <path d="M2 20h.01" stroke="url(#icon-grad)"/>
-  <path d="M7 20v-4" stroke="url(#icon-grad)"/>
-  <path d="M12 20v-8" stroke="url(#icon-grad)"/>
-  <path d="M17 20V8" stroke="url(#icon-grad)"/>
-  <path d="M22 4v16" stroke="url(#icon-grad)"/>
+  <g stroke="url(#icon-grad)">
+    <path d="M2 20h.01"/>
+    <path d="M7 20v-4"/>
+    <path d="M12 20v-8"/>
+    <path d="M17 20V8"/>
+    <path d="M22 4v16"/>
+  </g>
 </svg>
